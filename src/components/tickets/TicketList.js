@@ -4,9 +4,22 @@ import "./Tickets.css"
 export const TicketList = () => {
     const [tickets, setTickets] = useState([])
     const [filteredTickets, setFiltered] = useState([])
+    const [emergency, setEmergency] = useState(false)
 
     const localHoneyUser = localStorage.getItem("honey_user")
     const honeyUserObject = JSON.parse(localHoneyUser)
+
+    useEffect(
+        () => {
+            if (emergency) {
+                const emergencyTickets = tickets.filter(ticket => ticket.emergency === true)
+                setFiltered(emergencyTickets)
+            } else {
+                setFiltered(tickets)
+            }
+        },
+        [emergency]
+    )
 
     useEffect(
         () => {
@@ -31,10 +44,19 @@ export const TicketList = () => {
                 setFiltered(myTickets)
             }
         },
-        [tickets]
+        [ tickets ]
     ) 
 
-    return <> 
+    return <>
+    {
+        honeyUserObject.staff
+        ? <>
+        <button onClick={() => { setEmergency(true) } }>Emergency Only</button>
+        <button onClick={() => { setEmergency(false) } }>All Tickets</button>
+        </>
+        : "" 
+    }
+    
     <h2>List of Tickets</h2>
 
     <article className="tickets">
