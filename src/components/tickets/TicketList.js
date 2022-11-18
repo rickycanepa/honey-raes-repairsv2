@@ -48,7 +48,22 @@ export const TicketList = () => {
             }
         },
         [ tickets ]
-    ) 
+    )
+
+    useEffect(
+        () => {
+            if (openOnly) {
+            const openTicketArray = tickets.filter(ticket => {
+                return ticket.userId === honeyUserObject.id && ticket.dateCompleted === ""
+            })
+            setFiltered(openTicketArray)
+        } else {
+            const myTickets = tickets.filter(ticket => ticket.userId === honeyUserObject.id)
+            setFiltered(myTickets)
+        }
+        },
+        [ openOnly ]
+    )
 
     return <>
     {
@@ -59,7 +74,8 @@ export const TicketList = () => {
         </>
         : <>
         <button onClick={() => navigate("/ticket/create")}>Create Ticket</button>
-        <button onClick={() => }>Open Tickets</button>
+        <button onClick={() => updateOpenOnly(true)}>Open Tickets</button>
+        <button onClick={() => updateOpenOnly(false)}>All My Tickets</button>
         </> 
     }
     
